@@ -28,7 +28,7 @@ void Renderer::add_triangle(const Triangle& triangle, const Camera& camera) {
         size_t upper_y = static_cast<int>(floor(lower_upper_y.second / height_step - 0.5));
         double y = height_step * (0.5 + lower_y);
         for (size_t screen_y = lower_y; screen_y <= upper_y; ++screen_y, y += height_step) {
-            screen_.set_pixel(screen_x, screen_y, Pixel(triangle.get_color(), transformed.get_z(x, y)));
+            screen_.set_pixel(screen_x, screen_y, Pixel(triangle.color, transformed.get_z(x, y)));
         }
     }
 }

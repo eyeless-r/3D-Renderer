@@ -22,7 +22,7 @@ Point Camera::transform_point_coordinates(const Point& p) const {
 
 Triangle Camera::transform_triangle_coordinates(const renderer::Triangle& triangle) const {
     return Triangle(transform_point_coordinates(triangle.a), transform_point_coordinates(triangle.b),
-                    transform_point_coordinates(triangle.c), triangle.get_color());
+                    transform_point_coordinates(triangle.c), triangle.color);
 }
 
 void Camera::move_camera(const double x_shift, const double y_shift, const double z_shift) {

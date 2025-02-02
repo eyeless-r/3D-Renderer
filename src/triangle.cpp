@@ -2,11 +2,7 @@
 
 namespace renderer {
 
-Triangle::Triangle(Point a, Point b, Point c, Color color) : a(a), b(b), c(c), color_(color){};
-
-Color Triangle::get_color() const {
-    return color_;
-}
+Triangle::Triangle(Point a, Point b, Point c, Color color) : a(a), b(b), c(c), color(color){};
 
 void Triangle::sort_vertices() {
     if (a.x > b.x) {
