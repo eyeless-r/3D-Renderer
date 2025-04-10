@@ -1,29 +1,37 @@
-#include "src/renderer.h"
-
-using Point = renderer::Point;
+#include "src/application.h"
+#include "src/except.h"
+#include "src/parser.h"
 
 int main() {
-    renderer::Window window(sf::VideoMode({800, 800}), "3D Renderer");
-    renderer::Renderer render(800, 800);
-    renderer::Camera camera(20, 20, 7, 40, Point(0, 0, -7));
-    camera.rotate_camera(0, 0.3, -0.1);
+    using namespace renderer;
+    try {
+        Application app;
 
-    renderer::Triangle triangle1(Point(10, 0, 15), Point(5, 10, 10), Point(-5, -5, 10),
-                                 renderer::Color::Blue);  // some tests
-    render.add_triangle(triangle1, camera);
-    renderer::Triangle triangle2(Point(-15, 10, 20), Point(15, -5, 5), Point(10, -10, 5), renderer::Color::Red);
-    render.add_triangle(triangle2, camera);
-    renderer::Triangle triangle3(Point(15, -2, 10), Point(-10, -5, 12), Point(-3, -15, 10), renderer::Color::Green);
-    render.add_triangle(triangle3, camera);
+        Object snail = Parser::parse("../snail.obj");
+        snail.resize(2);
+        app.add_object(std::make_unique<Object>(snail));
 
-    while (window.isOpen()) {
-        window.clear();
-        while (const std::optional event = window.pollEvent()) {
-            if (event->is<sf::Event::Closed>()) {
-                window.close();
-            }
-        }
-        render.display(window);
-        window.display();
+        Point a1{5, 0, 40};
+        Point b1{5, 10, 60};
+        Point c1{-5, -5, 35};
+        Point d1{2, 2, 25};
+        Tetraedr tetraedr1 = Tetraedr(a1, b1, c1, d1, Color::Blue, Color::Green, Color::Red, Color::Yellow);
+        app.add_object(std::make_unique<Object>(tetraedr1));
+
+        Point a2{10, 5, 20};
+        Point b2{5, 5, 50};
+        Point c2{-5, 10, 40};
+        Point d2{0, 0, 45};
+        Tetraedr tetraedr2 = Tetraedr(a2, b2, c2, d2, Color::Blue, Color::Green, Color::Red, Color::Yellow);
+        app.add_object(std::make_unique<Object>(tetraedr2));
+
+        Point shift{15, 0, 10};
+        Cube cube = Cube(shift, 5, Color::Yellow);
+        app.add_object(std::make_unique<Object>(cube));
+
+        app.run();
+    } catch (...) {
+        except::react();
     }
+    return 0;
 }

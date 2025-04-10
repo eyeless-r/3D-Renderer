@@ -1,32 +1,38 @@
+#include <SFML/Graphics.hpp>
 #include <vector>
 
-#include "basics.h"
+#include "color.h"
+#include "linalg.h"
 
 namespace renderer {
-struct Pixel {
-    Pixel(Color color = Color::Transparent, double z = 0);
 
-    Color color;
-    double z;
+enum Height : uint32_t;
+enum Width : uint32_t;
+
+static const Color default_pixel_color = Color::Black;
+
+struct Pixel {
+
+    Color color = default_pixel_color;
+    double z = 2;
 };
 
 class Screen {
 public:
-    Screen(size_t height, size_t width);
+    Screen(Height height, Width width);
 
-    size_t get_height() const;
-
-    size_t get_width() const;
-
-    Color get_pixel_color(size_t x, size_t y) const;
-
-    void set_pixel(size_t x, size_t y, const Pixel& pixel);
+    uint32_t get_height() const;
+    uint32_t get_width() const;
+    Pixel &operator()(int32_t x, int32_t y);
+    const Pixel &operator()(int32_t x, int32_t y) const;
+    void set_pixel_if_closer(int32_t x, int32_t y, const Pixel &pixel);
+    std::vector<sf::Vertex> get_pixels() const;
 
 private:
     using ScreenPixels = std::vector<Pixel>;
 
-    size_t screen_height_;
-    size_t screen_width_;
+    uint32_t width_;
     ScreenPixels data_;
 };
-}  // namespace renderer
+
+} // namespace renderer

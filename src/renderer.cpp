@@ -1,52 +1,53 @@
 #include "renderer.h"
+// #include <cmath>
 
 namespace renderer {
 
-Renderer::Renderer(size_t height, size_t width) : screen_(Screen(height, width)) {
+Renderer::Renderer(Height height, Width width) : height_(height), width_(width) {
 }
 
-void Renderer::add_triangle(const Triangle& triangle, const Camera& camera) {
-    Triangle transformed = camera.transform_triangle_coordinates(triangle);
-    transformed.sort_vertices();
-    double height = camera.get_height();
-    double width = camera.get_width();
-    assert(-EPS <= transformed.a.x && transformed.c.x <= width + EPS && "Triangle vertex is outside the frame");
-    assert(-EPS <= transformed.a.y && transformed.a.y <= height + EPS && "Triangle vertex is outside the frame");
-    assert(-EPS <= transformed.b.y && transformed.b.y <= height + EPS && "Triangle vertex is outside the frame");
-    assert(-EPS <= transformed.c.y && transformed.c.y <= height + EPS && "Triangle vertex is outside the frame");
-    assert(-EPS <= transformed.a.z && transformed.a.z <= 1 + EPS && "Triangle vertex is outside the frame");
-    assert(-EPS <= transformed.b.z && transformed.b.z <= 1 + EPS && "Triangle vertex is outside the frame");
-    assert(-EPS <= transformed.c.z && transformed.c.z <= 1 + EPS && "Triangle vertex is outside the frame");
-    double height_step = height / screen_.get_height();
-    double width_step = width / screen_.get_width();
-    size_t left_x = static_cast<int>(ceil(transformed.a.x / width_step - 0.5));
-    size_t right_x = static_cast<int>(floor(transformed.c.x / width_step - 0.5));
-    double x = width_step * (0.5 + left_x);
-    for (size_t screen_x = left_x; screen_x <= right_x; ++screen_x, x += width_step) {
-        std::pair<double, double> lower_upper_y = transformed.get_lower_upper_y(x);
-        size_t lower_y = static_cast<int>(ceil(lower_upper_y.first / height_step - 0.5));
-        size_t upper_y = static_cast<int>(floor(lower_upper_y.second / height_step - 0.5));
-        double y = height_step * (0.5 + lower_y);
-        for (size_t screen_y = lower_y; screen_y <= upper_y; ++screen_y, y += height_step) {
-            screen_.set_pixel(screen_x, screen_y, Pixel(triangle.color, transformed.get_z(x, y)));
-        }
-    }
-}
+void Renderer::draw_screen_triangle(const ScreenTriangle &triangle, Screen &screen) const {
+    assert(-kEps <= triangle.get_first_point_by_x().z && "Triangle vertex is in front of front plane");
+    assert(-kEps <= triangle.get_second_point_by_x().z && "Triangle vertex is in front of front plane");
+    assert(-kEps <= triangle.get_third_point_by_x().z && "Triangle vertex is in front of front plane");
 
-void Renderer::display(Window& window) {
-    size_t height = screen_.get_height();
-    size_t width = screen_.get_width();
-    std::vector<sf::Vertex> pixels;
-    pixels.reserve(height * width);
-    for (size_t x = 0; x < width; ++x) {
-        for (size_t y = 0; y < height; ++y) {
-            Color color = screen_.get_pixel_color(x, y);
-            if (color != Color::Transparent) {
-                pixels.push_back(sf::Vertex{sf::Vector2f(x, height - 1 - y), color});
+    int32_t screen_height = screen.get_height();
+    int32_t screen_width = screen.get_height();
+    int32_t left_x = std::max(triangle.get_first_point_by_x().x, 0);
+    int32_t right_x = std::min(triangle.get_third_point_by_x().x, screen_width - 1);
+    for (int32_t x = left_x; x <= right_x; ++x) {
+        ScreenTriangle::LowerUpperY lower_upper_y = triangle.get_lower_upper_y(x);
+        int32_t lower_y = std::max(lower_upper_y.lower_y, 0);
+        int32_t upper_y = std::min(lower_upper_y.upper_y, screen_height - 1);
+        for (int32_t y = lower_y; y <= upper_y; ++y) {
+            double z = triangle.get_z(x, y);
+            if (z <= 1) {
+                screen.set_pixel_if_closer(x, y, Pixel{triangle.triangle_color, z});
             }
         }
     }
-    window.draw(pixels.data(), pixels.size(), sf::PrimitiveType::Points);
 }
 
-}  // namespace renderer
+void Renderer::draw_triangle(const Triangle &triangle, Screen &screen, const Camera &camera, const Light &light) const {
+    double height = camera.get_height();
+    double width = camera.get_width();
+    double height_step = screen.get_height() / height;
+    double width_step = screen.get_width() / width;
+    Color darkened_color = light.darken_triangle_color(triangle);
+    auto transformed_triangles = camera.clip_transform_triangle(triangle);
+    for (const auto &transformed_triangle : transformed_triangles) {
+        draw_screen_triangle(ScreenTriangle(transformed_triangle, darkened_color, height_step, width_step), screen);
+    }
+}
+
+Screen Renderer::render(const World &world_, const Camera &camera, const Light &light) const {
+    Screen screen(height_, width_);
+    for (const auto &object_ptr : world_.objects) {
+        for (const auto &triangle : object_ptr->get_triangles()) {
+            draw_triangle(triangle, screen, camera, light);
+        }
+    }
+    return screen;
+}
+
+} // namespace renderer

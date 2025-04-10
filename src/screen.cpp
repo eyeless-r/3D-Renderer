@@ -1,28 +1,56 @@
 #include "screen.h"
 
-#include "basics.h"
-
 namespace renderer {
-Pixel::Pixel(Color color, double z) : color(color), z(z){};
 
-Screen::Screen(size_t height, size_t width)
-    : screen_height_(height), screen_width_(width), data_(std::vector(height * width, Pixel())){};
-
-size_t Screen::get_height() const {
-    return screen_height_;
+Screen::Screen(Height height, Width width) : width_(width), data_(height * width) {
+    assert(height > 0 && "Screen height can not be 0");
+    assert(width > 0 && "Screen width can not be 0");
 }
 
-size_t Screen::get_width() const {
-    return screen_width_;
+uint32_t Screen::get_height() const {
+    return data_.size() / width_;
 }
 
-Color Screen::get_pixel_color(size_t x, size_t y) const {
-    return data_[x * screen_width_ + y].color;
+uint32_t Screen::get_width() const {
+    return width_;
 }
 
-void Screen::set_pixel(size_t x, size_t y, const Pixel& pixel) {  // to do: transparency
-    if (data_[x * screen_width_ + y].color == Color::Transparent || data_[x * screen_width_ + y].z > pixel.z) {
-        data_[x * screen_width_ + y] = pixel;
+Pixel &Screen::operator()(int32_t x, int32_t y) {
+    if ((x >= get_height()) || (y >= width_)) {
+        throw std::invalid_argument("Screen index is out of range");
+    }
+    return data_[x * width_ + y];
+}
+const Pixel &Screen::operator()(int32_t x, int32_t y) const {
+    if ((x < 0) || (x >= get_height()) || (y < 0) || (y >= width_)) {
+        throw std::invalid_argument("Screen index is out of range");
+    }
+    return data_[x * width_ + y];
+}
+
+void Screen::set_pixel_if_closer(int32_t x, int32_t y, const Pixel &pixel) {
+    if ((x < 0) || (x >= get_height()) || (y < 0) || (y >= width_)) {
+        throw std::invalid_argument("Screen index is out of range");
+    }
+    if ((*this)(x, y).z > pixel.z) {
+        (*this)(x, y) = pixel;
     }
 }
-}  // namespace renderer
+
+std::vector<sf::Vertex> Screen::get_pixels() const {
+    uint32_t height = get_height();
+    std::vector<sf::Vertex> pixels;
+    pixels.reserve(height * width_);
+    for (int32_t pixel_index = 0; pixel_index < data_.size(); ++pixel_index) {
+        int32_t x = pixel_index / width_;
+        int32_t y = pixel_index % width_;
+        Color color = data_[pixel_index].color;
+        if (color == default_pixel_color) {
+            continue;
+        }
+        pixels.push_back(sf::Vertex{sf::Vector2f(x, height - 1 - y), sf::Color(color.red, color.green, color.blue)});
+    }
+    return pixels;
+}
+
+} // namespace renderer
