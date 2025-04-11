@@ -4,7 +4,7 @@
 
 namespace renderer {
 
-Object Parser::parse(const std::string &filename) {
+Object Parser::parse(const std::string &filename, Color color) {
     if ((filename.size() < 4) || (filename.substr(filename.size() - 4, 4) != ".obj")) {
         throw std::invalid_argument("Filename should end with .obj");
     }
@@ -30,7 +30,7 @@ Object Parser::parse(const std::string &filename) {
     }
     std::vector<Triangle> triangles;
     for (const ParserTriangle &triangle : parser_triangles) {
-        triangles.push_back(Triangle(points[triangle.a], points[triangle.b], points[triangle.c]));
+        triangles.push_back(Triangle(points[triangle.a], points[triangle.b], points[triangle.c], color));
     }
     return Object(triangles);
 }

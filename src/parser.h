@@ -5,7 +5,7 @@ namespace renderer {
 
 class Parser {
 public:
-    static Object parse(const std::string &filename);
+    static Object parse(const std::string &filename, Color color);
 
 private:
     struct ParserTriangle {
