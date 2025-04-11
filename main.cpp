@@ -7,7 +7,7 @@ int main() {
     try {
         Application app;
 
-        Object snail = Parser::parse("../snail.obj");
+        Object snail = Parser::parse("../models/snail.obj");
         snail.resize(2);
         app.add_object(std::make_unique<Object>(snail));
 

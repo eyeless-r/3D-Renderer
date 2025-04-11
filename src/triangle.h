@@ -10,7 +10,7 @@ static const Color default_triangle_color = Color::White;
 
 class Triangle {
 public:
-    Triangle(Point a, Point b, Point c, Color color);
+    Triangle(Point a, Point b, Point c, Color color = default_triangle_color);
     void sort_vertices_by_z();
     Point get_a() const;
     Point get_b() const;
@@ -22,7 +22,7 @@ public:
     friend class Cube;
     friend class Tetraedr;
 
-    Color triangle_color = default_triangle_color;
+    Color triangle_color;
 
 protected:
     Triangle(Point a, Point b, Point c, Vector3 normal, Color color = default_triangle_color);
@@ -32,6 +32,8 @@ protected:
     Point c_;
     Vector3 normal_;
 };
+
+Vector3 calculate_triangle_normal(Point a, Point b, Point c);
 
 class ScreenTriangle {
 public:

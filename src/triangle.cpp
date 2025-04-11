@@ -3,7 +3,7 @@
 namespace renderer {
 
 Triangle::Triangle(Point a, Point b, Point c, Color color)
-    : a_(a), b_(b), c_(c), normal_(Vector3{0, 0, 0}), triangle_color(color) {
+    : a_(a), b_(b), c_(c), normal_(calculate_triangle_normal(a, b, c)), triangle_color(color) {
 }
 
 void Triangle::sort_vertices_by_z() {
@@ -42,6 +42,14 @@ void Triangle::resize(double factor) {
 
 Triangle::Triangle(Point a, Point b, Point c, Vector3 normal, Color color)
     : a_(a), b_(b), c_(c), normal_(normal), triangle_color(color) {
+}
+
+Vector3 calculate_triangle_normal(Point a, Point b, Point c) {
+    Vector3 side1 = to_Vector3(b - a);
+    Vector3 side2 = to_Vector3(c - a);
+    Vector3 normal = side1.cross(side2);
+    normal.normalize();
+    return normal;
 }
 
 ScreenTriangle::ScreenTriangle(const Triangle &triangle, Color color, double height_step, double width_step) {

@@ -13,10 +13,7 @@ Tetraedr::Tetraedr(Point a, Point b, Point c, Point d, Color color_abc, Color co
 }
 
 Vector3 calculate_tetraedr_triangle_normal(Point a, Point b, Point c, Point d) {
-    Vector3 side1 = to_Vector3(b - a);
-    Vector3 side2 = to_Vector3(c - a);
-    Vector3 abc_normal = side1.cross(side2);
-    abc_normal.normalize();
+    Vector3 abc_normal = calculate_triangle_normal(a, b, c);
     if (abc_normal.dot(to_Vector3(d - a)) < 0) {
         return abc_normal;
     }

@@ -13,8 +13,7 @@ private:
         int b;
         int c;
     };
-    static void parse_polygon(std::istringstream &iss, std::vector<ParserTriangle> &triangles,
-                              std::vector<int32_t> &normals);
+    static void parse_polygon(std::istringstream &iss, std::vector<ParserTriangle> &triangles);
 };
 
 } // namespace renderer
