@@ -1,3 +1,5 @@
+#pragma once
+
 #include "axis.h"
 #include "triangle.h"
 

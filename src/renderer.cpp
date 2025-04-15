@@ -1,5 +1,4 @@
 #include "renderer.h"
-// #include <cmath>
 
 namespace renderer {
 

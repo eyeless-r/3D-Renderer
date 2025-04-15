@@ -1,4 +1,5 @@
 #include "object.h"
+
 #include <string>
 
 namespace renderer {
