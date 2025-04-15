@@ -12,6 +12,12 @@ void Object::resize(double factor) {
     }
 }
 
+void Object::move(Point shift) {
+    for (Triangle &triangle : triangles_) {
+        triangle.move(shift);
+    }
+}
+
 std::vector<Triangle> Object::get_triangles() const {
     return triangles_;
 }

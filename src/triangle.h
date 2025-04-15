@@ -17,6 +17,7 @@ public:
     Point get_c() const;
     Vector3 get_normal() const;
     void resize(double factor);
+    void move(Point shift);
 
     friend class Parser;
     friend class Cube;

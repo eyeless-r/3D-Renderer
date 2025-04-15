@@ -40,6 +40,12 @@ void Triangle::resize(double factor) {
     c_ = c_ * factor;
 }
 
+void Triangle::move(Point shift) {
+    a_ = a_ + shift;
+    b_ = b_ + shift;
+    c_ = c_ + shift;
+}
+
 Triangle::Triangle(Point a, Point b, Point c, Vector3 normal, Color color)
     : a_(a), b_(b), c_(c), normal_(normal), triangle_color(color) {
 }
