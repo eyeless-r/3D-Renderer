@@ -8,16 +8,16 @@
 
 namespace renderer {
 
-enum Height : uint32_t;
-enum Width : uint32_t;
-
-static const Color default_pixel_color = Color::Black;
+static constexpr Color DefaultPixelColor = Colors::Black;
 
 struct Pixel {
 
-    Color color = default_pixel_color;
+    Color color = DefaultPixelColor;
     double z = 2;
 };
+
+enum Height : uint32_t;
+enum Width : uint32_t;
 
 class Screen {
 public:

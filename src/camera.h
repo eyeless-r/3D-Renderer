@@ -16,8 +16,8 @@ public:
     std::vector<Triangle> clip_transform_triangle(Triangle triangle) const;
 
 private:
-    Point point_in_camera_coordinates(const Point p) const;
-    Triangle triangle_in_camera_coordinates(const Triangle &triangle) const;
+    Point transform_point_to_camera_coordinates(const Point p) const;
+    Triangle transform_triangle_to_camera_coordinates(const Triangle &triangle) const;
     Point transform_point_coordinates(const Point p) const;
     Triangle transform_triangle_coordinates(const Triangle &triangle) const;
     Point find_segment_intersection_with_front_plane(const Point a, const Point b) const;

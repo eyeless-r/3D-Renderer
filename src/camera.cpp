@@ -61,7 +61,7 @@ double Camera::get_width() const {
 }
 
 std::vector<Triangle> Camera::clip_transform_triangle(Triangle triangle) const {
-    triangle = triangle_in_camera_coordinates(triangle);
+    triangle = transform_triangle_to_camera_coordinates(triangle);
     triangle.sort_vertices_by_z();
     if (triangle.get_a().z >= front_plane_distance_) {
         return {transform_triangle_coordinates(triangle)};
@@ -82,15 +82,16 @@ std::vector<Triangle> Camera::clip_transform_triangle(Triangle triangle) const {
                 Triangle(triangle.get_c(), ab_intersection, triangle.get_b(), triangle.triangle_color))};
 }
 
-Point Camera::point_in_camera_coordinates(const Point p) const {
+Point Camera::transform_point_to_camera_coordinates(const Point p) const {
     Vector3 coordinates = {p.x - focus_.x, p.y - focus_.y, p.z - focus_.z};
     Vector3 new_coordinates = camera_basis_rotation_.transpose() * coordinates;
     return Point{new_coordinates[0], new_coordinates[1], new_coordinates[2]};
 }
 
-Triangle Camera::triangle_in_camera_coordinates(const Triangle &triangle) const {
-    return Triangle(point_in_camera_coordinates(triangle.get_a()), point_in_camera_coordinates(triangle.get_b()),
-                    point_in_camera_coordinates(triangle.get_c()), triangle.triangle_color);
+Triangle Camera::transform_triangle_to_camera_coordinates(const Triangle &triangle) const {
+    return Triangle(transform_point_to_camera_coordinates(triangle.get_a()),
+                    transform_point_to_camera_coordinates(triangle.get_b()),
+                    transform_point_to_camera_coordinates(triangle.get_c()), triangle.triangle_color);
 }
 
 Point Camera::transform_point_coordinates(const Point p) const {

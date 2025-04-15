@@ -6,11 +6,11 @@
 
 namespace renderer {
 
-static const Color default_triangle_color = Color::White;
+static constexpr Color DefaultTriangleColor = Colors::White;
 
 class Triangle {
 public:
-    Triangle(Point a, Point b, Point c, Color color = default_triangle_color);
+    Triangle(Point a, Point b, Point c, Color color);
     void sort_vertices_by_z();
     Point get_a() const;
     Point get_b() const;
@@ -19,15 +19,15 @@ public:
     void resize(double factor);
     void move(Point shift);
 
-    friend class Parser;
     friend class Cube;
     friend class Tetraedr;
 
-    Color triangle_color;
+    Color triangle_color = DefaultTriangleColor;
 
 protected:
-    Triangle(Point a, Point b, Point c, Vector3 normal, Color color = default_triangle_color);
+    Triangle(Point a, Point b, Point c, Vector3 normal, Color color);
 
+private:
     Point a_;
     Point b_;
     Point c_;
@@ -50,7 +50,7 @@ public:
     ScreenPoint get_second_point_by_x() const;
     ScreenPoint get_third_point_by_x() const;
 
-    Color triangle_color = default_triangle_color;
+    Color triangle_color = DefaultTriangleColor;
 
 private:
     ScreenPoint a_;

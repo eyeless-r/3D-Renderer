@@ -45,7 +45,7 @@ std::vector<sf::Vertex> Screen::get_pixels() const {
         int32_t x = pixel_index / width_;
         int32_t y = pixel_index % width_;
         Color color = data_[pixel_index].color;
-        if (color == default_pixel_color) {
+        if (color == DefaultPixelColor) {
             continue;
         }
         pixels.push_back(sf::Vertex{sf::Vector2f(x, height - 1 - y), sf::Color(color.red, color.green, color.blue)});
