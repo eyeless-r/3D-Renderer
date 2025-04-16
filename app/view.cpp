@@ -1,6 +1,6 @@
 #include "view.h"
 
-namespace renderer {
+namespace app {
 
 View::View(sf::RenderWindow *window) : window_(window) {
 }
@@ -12,4 +12,4 @@ void View::show(const Screen &screen) {
     window_->display();
 }
 
-} // namespace renderer
+} // namespace app

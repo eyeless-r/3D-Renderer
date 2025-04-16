@@ -1,6 +1,6 @@
 #include "runtime.h"
 
-namespace renderer {
+namespace app {
 
 RunTime::RunTime() : window_(sf::VideoMode({kScreenHeight, kScreenWidth}), "3D Renderer") {
 }
@@ -100,4 +100,4 @@ void RunTime::handle_keyboard(Camera &camera, Light &light) {
     }
 }
 
-} // namespace renderer
+} // namespace app

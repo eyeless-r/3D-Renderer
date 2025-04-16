@@ -1,9 +1,11 @@
-#include "src/application.h"
-#include "src/except.h"
+#include "app/application.h"
+#include "app/except.h"
 #include "src/parser.h"
 
 int main() {
-    using namespace renderer;
+
+    using namespace app;
+
     try {
         Application app;
 

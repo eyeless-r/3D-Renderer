@@ -1,8 +1,10 @@
-#include "renderer.h"
+#include "../src/renderer.h"
 #include "runtime.h"
 #include "view.h"
 
-namespace renderer {
+namespace app {
+
+// using namespace renderer;
 
 class Application {
 public:
@@ -33,4 +35,4 @@ private:
     View view_;
 };
 
-} // namespace renderer
+} // namespace app

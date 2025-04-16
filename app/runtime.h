@@ -1,10 +1,12 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/Window/Keyboard.hpp>
 
-#include "camera.h"
-#include "light.h"
+#include "../src/camera.h"
+#include "../src/light.h"
 
-namespace renderer {
+namespace app {
+
+using namespace renderer;
 
 class RunTime {
 public:
@@ -26,4 +28,4 @@ private:
     sf::RenderWindow window_;
 };
 
-} // namespace renderer
+} // namespace app

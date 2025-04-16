@@ -1,6 +1,6 @@
 #include "application.h"
 
-namespace renderer {
+namespace app {
 
 Application::Application()
     : renderer_(Height{RunTime::kScreenHeight}, Width{RunTime::kScreenWidth}), world_(),
@@ -23,4 +23,4 @@ void Application::run() {
 const Point Application::kCameraFocus = Point{0, 0, -20};
 const Vector3 Application::kLightDirection = Vector3{0, 0, 1};
 
-} // namespace renderer
+} // namespace app

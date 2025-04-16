@@ -12,7 +12,9 @@ include_directories(submodules/SFML/include)
 
 set(SRC_DIR src)
 file(GLOB SRC_FILES "${SRC_DIR}/*.cpp")
+set(APP_DIR app)
+file(GLOB APP_FILES "${APP_DIR}/*.cpp")
 
-add_executable(3D-Renderer main.cpp ${SRC_FILES})
+add_executable(3D-Renderer main.cpp ${SRC_FILES} ${APP_FILES})
 
 target_link_libraries(3D-Renderer PRIVATE Eigen3::Eigen SFML::Graphics SFML::Window)
