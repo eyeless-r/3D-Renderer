@@ -1,0 +1,7 @@
+
+[submodule "submodules/eigen"]
+	path = submodules/eigen
+	url = https://gitlab.com/libeigen/eigen.git
+[submodule "submodules/SFML"]
+	path = submodules/SFML
+	url = https://github.com/SFML/SFML.git
