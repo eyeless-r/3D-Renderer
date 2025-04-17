@@ -4,8 +4,6 @@
 
 namespace app {
 
-// using namespace renderer;
-
 class Application {
 public:
     using Window = sf::RenderWindow;
